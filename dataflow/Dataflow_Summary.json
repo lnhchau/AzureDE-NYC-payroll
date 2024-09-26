@@ -9,41 +9,6 @@
 						"referenceName": "nycpayroll_2020",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "nycpayroll_2021",
-						"type": "DatasetReference"
-					},
-					"name": "source2"
-				},
-				{
-					"dataset": {
-						"referenceName": "AgencyMaster",
-						"type": "DatasetReference"
-					},
-					"name": "source3"
-				},
-				{
-					"dataset": {
-						"referenceName": "TitleMaster",
-						"type": "DatasetReference"
-					},
-					"name": "source4"
-				},
-				{
-					"dataset": {
-						"referenceName": "EmpMaster",
-						"type": "DatasetReference"
-					},
-					"name": "source5"
-				},
-				{
-					"dataset": {
-						"referenceName": "nycpayroll_2020",
-						"type": "DatasetReference"
-					},
 					"name": "source6"
 				},
 				{
@@ -57,38 +22,13 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "NYC_Payroll_Data_2020",
+						"referenceName": "NYC_Payroll_Summary",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink6"
 				},
 				{
-					"dataset": {
-						"referenceName": "NYC_Payroll_Data_2021",
-						"type": "DatasetReference"
-					},
-					"name": "sink2"
-				},
-				{
-					"dataset": {
-						"referenceName": "NYC_Payroll_AGENCY_MD",
-						"type": "DatasetReference"
-					},
-					"name": "sink3"
-				},
-				{
-					"dataset": {
-						"referenceName": "NYC_Payroll_TITLE_MD",
-						"type": "DatasetReference"
-					},
-					"name": "sink4"
-				},
-				{
-					"dataset": {
-						"referenceName": "NYC_Payroll_EMP_MD",
-						"type": "DatasetReference"
-					},
-					"name": "sink5"
+					"name": "sink7"
 				}
 			],
 			"transformations": [
@@ -111,103 +51,32 @@
 				"}",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source2",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source3",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source4",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source5",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source6",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source7",
-				"source6, source7 union(byName: true)~> union1",
+				"source6, source7 union(byName: false)~> union1",
 				"union1 filter(toInteger(FiscalYear) >= $dataflow_param_fiscalyear) ~> filter1",
 				"filter1 derive(TotalPaid = RegularGrossPaid + TotalOTPaid+TotalOtherPay) ~> derivedColumn1",
 				"derivedColumn1 aggregate(groupBy(TotalPaidSum = sum(TotalPaid),",
 				"          {} = ERROR_FUNCTION('')),",
 				"     AgencyName = ERROR_FUNCTION(''),",
 				"          FiscalYear = ERROR_FUNCTION('')) ~> aggregate1",
-				"source1 sink(allowSchemaDrift: true,",
+				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
+				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
-				"source2 sink(allowSchemaDrift: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink6",
+				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          FiscalYear as integer,",
-				"          PayrollNumber as integer,",
-				"          AgencyCode as string,",
-				"          AgencyName as string,",
-				"          EmployeeID as string,",
-				"          LastName as string,",
-				"          FirstName as string,",
-				"          AgencyStartDate as date,",
-				"          WorkLocationBorough as string,",
-				"          TitleCode as string,",
-				"          TitleDescription as string,",
-				"          LeaveStatusasofJune30 as string,",
-				"          BaseSalary as double,",
-				"          PayBasis as string,",
-				"          RegularHours as double,",
-				"          RegularGrossPaid as double,",
-				"          OTHours as double,",
-				"          TotalOTPaid as double,",
-				"          TotalOtherPay as double",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink2",
-				"source3 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink3",
-				"source4 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink4",
-				"source5 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink5"
+				"     skipDuplicateMapOutputs: true) ~> sink7"
 			]
 		}
 	}
