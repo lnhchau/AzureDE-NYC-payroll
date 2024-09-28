@@ -1,5 +1,5 @@
 {
-	"name": "NYC_Payroll_Summary",
+	"name": "dts_empmaster",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "linked_storagemain",
@@ -10,7 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "dirstaging",
+				"fileName": "EmpMaster.csv",
+				"folderPath": "dirpayrollfiles",
 				"container": "filesystemchau"
 			},
 			"columnDelimiter": ",",
@@ -20,11 +21,15 @@
 		},
 		"schema": [
 			{
-				"name": "AgencyID",
+				"name": "EmployeeID",
 				"type": "String"
 			},
 			{
-				"name": "AgencyName",
+				"name": "LastName",
+				"type": "String"
+			},
+			{
+				"name": "FirstName",
 				"type": "String"
 			}
 		]

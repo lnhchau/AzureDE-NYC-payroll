@@ -1,5 +1,5 @@
 {
-	"name": "NYC_Payroll_Summary",
+	"name": "dts_agencymaster",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "linked_storagemain",
@@ -10,7 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "dirstaging",
+				"fileName": "AgencyMaster.csv",
+				"folderPath": "dirpayrollfiles",
 				"container": "filesystemchau"
 			},
 			"columnDelimiter": ",",
